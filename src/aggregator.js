@@ -23,8 +23,8 @@ let runningAverage = 0;
 
 async function aggregateOrders() {
   await consumer.connect();
-  console.log('✅ Aggregator connected to Kafka');
-  console.log('📊 Starting real-time price aggregation...\n');
+  console.log(' Aggregator connected to Kafka');
+  console.log(' Starting real-time price aggregation...\n');
 
   await consumer.subscribe({ 
     topic: config.topics.orders, 
@@ -42,11 +42,11 @@ async function aggregateOrders() {
         totalPrice += order.price;
         runningAverage = totalPrice / totalOrders;
 
-        console.log(`📊 Order: ${order.orderId} | Price: $${order.price.toFixed(2)}`);
+        console.log(` Order: ${order.orderId} | Price: $${order.price.toFixed(2)}`);
         console.log(`   Running Average: $${runningAverage.toFixed(2)} (from ${totalOrders} orders)`);
         console.log(`   Total Revenue: $${totalPrice.toFixed(2)}\n`);
       } catch (error) {
-        console.error('❌ Error in aggregation:', error);
+        console.error(' Error in aggregation:', error);
       }
     }
   });
@@ -54,8 +54,8 @@ async function aggregateOrders() {
 
 // Handle shutdown
 process.on('SIGINT', async () => {
-  console.log('\n🛑 Shutting down aggregator...');
-  console.log(`\n📈 Final Statistics:`);
+  console.log('\n Shutting down aggregator...');
+  console.log(`\n Final Statistics:`);
   console.log(`   Total Orders: ${totalOrders}`);
   console.log(`   Average Price: $${runningAverage.toFixed(2)}`);
   console.log(`   Total Revenue: $${totalPrice.toFixed(2)}`);

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",gi
+    "test": "echo \"Error: no test specified\" && exit 1",
     "producer": "node src/producer.js",
     "consumer": "node src/consumer.js",
     "aggregator": "node src/aggregator.js"
