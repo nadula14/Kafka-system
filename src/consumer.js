@@ -20,9 +20,7 @@ const producer = kafka.producer();
 const MAX_RETRIES = 3;
 const retryAttempts = new Map();
 
-// Simulate processing with random failures
 async function processOrder(order) {
-  // Simulate 20% failure rate
   if (Math.random() < 0.2) {
     throw new Error('Temporary processing error');
   }
@@ -95,11 +93,10 @@ async function consumeOrders() {
           const nextAttempt = currentAttempt + 1;
 
           if (nextAttempt <= MAX_RETRIES) {
-            // Send to retry topic
             await sendToRetryTopic(message, nextAttempt);
             retryAttempts.set(orderId, nextAttempt);
           } else {
-            // Max retries exceeded, send to DLQ
+            
             await sendToDLQ(message, processingError);
             retryAttempts.delete(orderId);
           }
@@ -111,7 +108,6 @@ async function consumeOrders() {
   });
 }
 
-// Handle shutdown
 process.on('SIGINT', async () => {
   console.log('\n Shutting down consumer...');
   await consumer.disconnect();

@@ -4,11 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const config = require('../config/kafka');
 
-// Load Avro schema
 const schemaPath = path.join(__dirname, '../schemas/order.avsc');
 const orderSchema = avro.Type.forSchema(JSON.parse(fs.readFileSync(schemaPath, 'utf8')));
 
-// Initialize Kafka
 const kafka = new Kafka({
   clientId: config.clientId,
   brokers: config.brokers
@@ -16,7 +14,6 @@ const kafka = new Kafka({
 
 const consumer = kafka.consumer({ groupId: 'order-aggregator-group' });
 
-// Aggregation state
 let totalOrders = 0;
 let totalPrice = 0;
 let runningAverage = 0;
@@ -34,10 +31,8 @@ async function aggregateOrders() {
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
       try {
-        // Deserialize Avro message
         const order = orderSchema.fromBuffer(message.value);
 
-        // Update aggregation
         totalOrders++;
         totalPrice += order.price;
         runningAverage = totalPrice / totalOrders;
@@ -52,7 +47,6 @@ async function aggregateOrders() {
   });
 }
 
-// Handle shutdown
 process.on('SIGINT', async () => {
   console.log('\n Shutting down aggregator...');
   console.log(`\n Final Statistics:`);

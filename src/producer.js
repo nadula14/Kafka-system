@@ -4,11 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const config = require('../config/kafka');
 
-// Load Avro schema
 const schemaPath = path.join(__dirname, '../schemas/order.avsc');
 const orderSchema = avro.Type.forSchema(JSON.parse(fs.readFileSync(schemaPath, 'utf8')));
 
-// Initialize Kafka
 const kafka = new Kafka({
   clientId: config.clientId,
   brokers: config.brokers
@@ -16,7 +14,6 @@ const kafka = new Kafka({
 
 const producer = kafka.producer();
 
-// Generate random order
 function generateOrder(orderId) {
   const products = ['Laptop', 'Phone', 'Tablet', 'Monitor', 'Keyboard', 'Mouse'];
   return {
@@ -36,7 +33,6 @@ async function produceOrders() {
     try {
       const order = generateOrder(orderCount++);
       
-      // Serialize with Avro
       const encodedMessage = orderSchema.toBuffer(order);
 
       await producer.send({
@@ -53,7 +49,7 @@ async function produceOrders() {
     } catch (error) {
       console.error(' Error producing message:', error);
     }
-  }, 2000); // Send every 2 seconds
+  }, 2000); 
 }
 
 // Handle shutdown
