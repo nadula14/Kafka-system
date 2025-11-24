@@ -28,7 +28,7 @@ function generateOrder(orderId) {
 
 async function produceOrders() {
   await producer.connect();
-  console.log('✅ Producer connected to Kafka');
+  console.log(' Producer connected to Kafka');
 
   let orderCount = 1;
 
@@ -51,14 +51,14 @@ async function produceOrders() {
 
       console.log(`📦 Sent: ${order.orderId} - ${order.product} - $${order.price}`);
     } catch (error) {
-      console.error('❌ Error producing message:', error);
+      console.error(' Error producing message:', error);
     }
   }, 2000); // Send every 2 seconds
 }
 
 // Handle shutdown
 process.on('SIGINT', async () => {
-  console.log('\n🛑 Shutting down producer...');
+  console.log('\n Shutting down producer...');
   await producer.disconnect();
   process.exit(0);
 });

@@ -27,7 +27,7 @@ async function processOrder(order) {
     throw new Error('Temporary processing error');
   }
   
-  console.log(`✅ Processed: ${order.orderId} - ${order.product} - $${order.price}`);
+  console.log(` Processed: ${order.orderId} - ${order.product} - $${order.price}`);
   return true;
 }
 
@@ -105,7 +105,7 @@ async function consumeOrders() {
           }
         }
       } catch (error) {
-        console.error('❌ Error consuming message:', error);
+        console.error(' Error consuming message:', error);
       }
     }
   });
@@ -113,7 +113,7 @@ async function consumeOrders() {
 
 // Handle shutdown
 process.on('SIGINT', async () => {
-  console.log('\n🛑 Shutting down consumer...');
+  console.log('\n Shutting down consumer...');
   await consumer.disconnect();
   await producer.disconnect();
   process.exit(0);
